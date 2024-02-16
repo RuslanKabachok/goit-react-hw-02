@@ -1,6 +1,7 @@
 .button {
   margin-right: 8px;
   padding: 8px;
+  text-transform: capitalize;
 }
 
 .btnBox {
