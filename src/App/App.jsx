@@ -3,15 +3,20 @@ import Options from '../Options/Options';
 import Description from '../Description/Description';
 import Feedback from '../Feedback/Feedback';
 import Notification from '../Notification/Notification';
-// import Reset from '../Reset/Reset';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function App() {
-  const [feedback, setFeedback] = useState({
-    good: 0,
-    neutral: 0,
-    bad: 0,
+  const [feedback, setFeedback] = useState(() => {
+    const savedStats = localStorage.getItem('stats');
+    if (savedStats !== null) {
+      return JSON.parse(savedStats);
+    }
+    return { good: 0, neutral: 0, bad: 0 };
   });
+
+  useEffect(() => {
+    localStorage.setItem('stats', JSON.stringify(feedback));
+  }, [feedback]);
 
   const updateFeedback = (feedbackType) => {
     setFeedback({
@@ -45,7 +50,7 @@ function App() {
           {totalFeedback === 0 ? (
             <Notification />
           ) : (
-            <Feedback stats={feedback} />
+            <Feedback stats={feedback} sum={totalFeedback} />
           )}
         </div>
       </div>
